@@ -1,11 +1,11 @@
 import type {Metadata} from 'next'
+import {notFound} from 'next/navigation'
 import Head from 'next/head'
 
 import PageBuilderPage from '@/app/components/PageBuilder'
 import {sanityFetch} from '@/sanity/lib/live'
 import {getPageQuery, pagesSlugs} from '@/sanity/lib/queries'
 import {GetPageQueryResult} from '@/sanity.types'
-import {PageOnboarding} from '@/app/components/Onboarding'
 
 /**
  * Generate the static params for the page.
@@ -45,11 +45,7 @@ export default async function Page(props: PageProps<'/[slug]'>) {
   const [{data: page}] = await Promise.all([sanityFetch({query: getPageQuery, params})])
 
   if (!page?._id) {
-    return (
-      <div className="py-40">
-        <PageOnboarding />
-      </div>
-    )
+    return notFound()
   }
 
   return (
